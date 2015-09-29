@@ -1,0 +1,176 @@
+<html ng-app="MemeGenerator">
+    <head>
+        <title>Meme Generator</title>
+        <meta charset="utf-8">
+
+        <link rel="stylesheet" href="bower/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="bower/sweetalert/dist/sweetalert.css">
+        <link rel="stylesheet" href="bower/image-picker/image-picker/image-picker.css">
+        <style>
+            body {
+                margin-top: 40px;
+            }
+            .sweet-alert {
+                background-color: white;
+                font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                width: 1000px !important;
+                padding: 22px;
+                border-radius: 5px;
+                text-align: center;
+                position: absulote;
+                left: 39% !important;
+                top: 40% !important;
+                margin-left: -256px;
+                margin-top: -200px;
+                overflow: hidden;
+                display: none;
+                z-index: 99999;
+            }
+            div.sweet-alert fieldset {
+                display: none;
+            }
+            img.edit-size {
+                width: 256px;
+            }
+            input.meme-text {
+                width: 40%;
+                margin: 0 auto;
+            }
+        </style>
+        
+        <script src="bower/jquery/dist/jquery.min.js"></script>
+        <script src="bower/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="bower/angular/angular.min.js"></script>
+        <script src="bower/sweetalert/dist/sweetalert.min.js"></script>
+        <script src="bower/image-picker/image-picker/image-picker.min.js"></script>
+        <script>
+            angular.module("MemeGenerator", []);
+            angular.module("MemeGenerator")
+                .controller("MemeController", function($scope, $http){
+                $scope.properties = {
+                    name: 'MemeGenerator',
+                    service: 'http://memefy.herokuapp.com',
+                    aliases: {
+                        "1":"raptor",
+                        "2":"raptor",
+                        "3":"raptor",
+                        "4":"raptor",
+                        "5":"raptor"
+                    },
+                };
+                
+                $scope.methods = {
+                    proccessInput: function() {
+                        var top = jQuery('#toptext').val().replace(/ /g, "_");
+                        var bottom = jQuery('#bottomtext').val().replace(/ /g, "_");
+                        var id = parseInt(jQuery('#imgId').val());
+                        
+                        var url = $scope.properties.service + '/' + top + '/' + bottom + '/' + this.getAlias(id);
+                        return url;
+                    },
+                    
+                    getAlias: function(id){
+                        return $scope.properties.aliases[id];
+                    }
+                };
+                
+                $scope.openModal = function() {
+                    //As imagens de miniatura devem ter a dimensão de 165x165
+                    var imgOpts = "<span>Escolha uma das imagens abaixo</span> \
+                                  <br/><br/><br/> \
+                                  <select id='images' > \
+                                    <option data-img-src='./img/1.jpg' value='1'></option> \
+                                    <option data-img-src='./img/1.jpg' value='2'></option> \
+                                    <option data-img-src='./img/1.jpg' value='3'></option> \
+                                    <option data-img-src='./img/1.jpg' value='4'></option> \
+                                    <option data-img-src='./img/1.jpg' value='5'></option> \
+                                  </select>";
+                    var phraseHtml = function(id){
+                      var imgTemplate = "<input type='text' class='text-center meme-text' id='toptext'> \
+                                         <br/><br/><br/> \
+                                         <img class='edit-size' src='./img/{id}.jpg'> \
+                                         <input type='hidden' value='{id}' id='imgId'> \
+                                         <br/><br/><br/> \
+                                         <input type='text' class='text-center meme-text' id='bottomtext'> \ ";
+                      return imgTemplate.replace(/{id}/g, id);
+                    };
+                    
+                    var afterSelect = function(inputValue) {
+                        if(inputValue === false) return false;
+                        if(inputValue === "") {
+                            swal.showInputError("Selecione alguma imagem");
+                            return false;
+                        }
+                        
+                        swal({
+                            title: "Customizando...",
+                            text: phraseHtml(inputValue),
+                            html:true,
+                            showCancelButton: true,
+                            closeOnConfirm: false,
+                            animation: "slide-from-top",
+                            type: "input",
+                        },
+                        function(inputValue) {
+                            if(inputValue === false) return false;
+                            if(inputValue === "") {
+                                swal.showInputError("Insira algum texto");
+                                return false;
+                            }
+                            var imgTemplate = function(src) {
+                                return "<img src='{src}' class='img-result'>".replace(/{src}/g, src);
+                            }
+                            
+                            var url = $scope.methods.proccessInput();
+                            swal({
+                                title: "Meme criado. Compartilhe!",
+                                text: imgTemplate(url),
+                                html: true,
+                                showCancelButton: false,
+                                closeOnConfirm: true,
+                                animation: "slide-from-top",
+                                type: "success"
+                            });
+                        });
+                    };
+                    
+                    swal({
+                        title: "Crie seu meme!",
+                        text: imgOpts,
+                        type: "input",
+                        showCancelButton: true,
+                        closeOnConfirm: false,
+                        animation: "slide-from-top",
+                        inputPlaceholder: "Imagem x",
+                        html: true
+                    },
+                        afterSelect
+                    );
+                    
+                    jQuery('select#images').imagepicker({
+                        initialized: function(e){
+                            jQuery('div.sweet-alert fieldset input').val(jQuery('select#images').val());
+                        }
+                    });
+                    jQuery("select#images").change(function(){
+                        jQuery('div.sweet-alert fieldset input').val(jQuery(this).val());
+                    })
+                };
+                
+            });
+        </script>
+    </head>
+    <body ng-controller="MemeController">
+
+        <div class="container text-center">
+            <button class="btn btn-primary" 
+                    ng-click="openModal()">
+                Create your meme
+            </button>
+        </div>
+        
+        <script>
+
+        </script>
+    </body>
+</html>
