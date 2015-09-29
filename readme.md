@@ -3,15 +3,15 @@
 - Imagens
     - Miniaturas
     
-    É necessário adicionar as miniaturas no diretório ```sh memefy-client/img ```. As miniaturas precisar ter as dimensões (165x165).
+    É necessário adicionar as miniaturas no diretório ``` memefy-client/img ```. As miniaturas precisar ter as dimensões (165x165).
     
     - Base
     
-    As imagens devem precisam estar no diretório ```sh memefy-server/public/images/meme ``` do servidor de memes. Para elas serem reconhecidas, é necessário adicioná-las no arquivo ```sh memes.yml ``` seguindo as regras lá definidas. As imagens precisam conter as dimensões (600x600).
+    As imagens devem precisam estar no diretório ``` memefy-server/public/images/meme ``` do servidor de memes. Para elas serem reconhecidas, é necessário adicioná-las no arquivo ``` memes.yml ``` seguindo as regras lá definidas. As imagens precisam conter as dimensões (600x600).
     
     - Integração
     
-    Para reconhecer as imagens, o cliente deve preencher um array contendo os aliases do servidor. Esse array pode ser encontrado em ```sh memefy-client/index.html ``` em ```js $scope.properties.aliases ```.
+    Para reconhecer as imagens, o cliente deve preencher um array contendo os aliases do servidor. Esse array pode ser encontrado em ``` memefy-client/index.html ``` em ```js $scope.properties.aliases ```.
     Por exemplo:
     - Servidor
     (memes.yml)
@@ -50,12 +50,12 @@
         Caso não seja informado um dos textos, obrigatóriamente o texto sera posto na parte de baixo
     
     - Alias da imagem
+    
+        O alias da imagem pode funcionar de duas maneiras:             
+        1. Fornecendo o alias cadastrado no ``` memes.yml ```
+        2. Fornecendo a url completa de uma imagem externa* ao servidor
         
-        O alias da imagem pode funcionar de duas maneiras: 
-            
-            1. Fornecendo o alias cadastrado no ``` memes.yml ```
-            2. Fornecendo a url completa de uma imagem externa* ao servidor
-            
+        
             * Fornecer um alias que redireciona ao servidor fornece um meme de erro.
 
 # Instalando
