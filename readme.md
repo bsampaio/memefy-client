@@ -60,7 +60,7 @@
 
 # Instalando
 
-Utilizando um servidor PaaS é bem simples. Basta instalar o git na máquina local e fazer um ```sh git clone <url do .git do repositório>``` e no caso do heroku, executar o comando ``` heroku create ``` e o app estará funcionando.
+Utilizando um servidor PaaS é bem simples. Basta instalar o git na máquina local e fazer um ```git clone <url do .git do repositório>``` e no caso do heroku, executar o comando ``` heroku create ``` e o app estará funcionando.
 
 
 
